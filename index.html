@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陈曦 | 活动视觉设计师</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== Design Tokens ===== */
+:root {
+  --ink: #0D0D0D;
+  --paper: #F7F7F4;
+  --bone: #E8E6DF;
+  --mist: #DDE6EA;
+  --moss: #71806A;
+  --cobalt: #315C98;
+  --clay: #C2785B;
+  --shadow-soft: 0 18px 60px rgba(13,13,13,0.08);
+  --font-body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 水平线纹理 */
+  background-image:
+    linear-gradient(to bottom, transparent 63px, rgba(13,13,13,0.025) 63px, rgba(13,13,13,0.025) 64px, transparent 64px);
+  background-size: 100% 64px;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+ul, ol { list-style: none; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ===== Utility ===== */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+.container { max-width: 1480px; margin: 0 auto; padding: 0 20px; }
+@media (min-width: 768px) { .container { padding: 0 32px; } }
+
+/* ===== Nav ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  height: 64px;
+  background: rgba(247,247,244,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(13,13,13,0.1);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+nav.scrolled { background: rgba(247,247,244,0.97); box-shadow: 0 1px 0 rgba(13,13,13,0.06); }
+.nav-inner {
+  max-width: 1480px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; height: 100%;
+}
+@media (min-width: 768px) { .nav-inner { padding: 0 32px; } }
+.nav-logo {
+  font-family: var(--font-body);
+  font-size: 14px; font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  z-index: 60;
+}
+.nav-links { display: flex; gap: 28px; }
+@media (max-width: 767px) {
+  .nav-links {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--paper);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 32px; z-index: 55;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 20px !important; }
+}
+.nav-links a {
+  font-size: 14px; font-weight: 500;
+  color: rgba(13,13,13,0.55);
+  transition: color 0.25s; padding: 4px 0;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.menu-toggle {
+  display: none; background: none; border: none;
+  padding: 8px; z-index: 60;
+}
+@media (max-width: 767px) { .menu-toggle { display: block; } }
+.menu-toggle span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); margin: 5px 0;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.menu-toggle.open span:nth-child(2) { opacity: 0; }
+.menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* ===== Pages ===== */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== Hero ===== */
+.hero {
+  position: relative; min-height: 88svh; overflow: hidden;
+  background: var(--ink); color: var(--paper);
+  padding-top: 64px;
+  display: flex; align-items: flex-end;
+}
+.hero-bg {
+  position: absolute; inset: 0; transform: scale(1.05); overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 40%, rgba(49,92,152,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 70% 60%, rgba(113,128,106,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 30%, rgba(194,120,91,0.25) 0%, transparent 50%),
+    var(--ink);
+  background-size: cover; background-position: center;
+}
+/* Image fallback: img covers gradient; on error img hides, gradient shows */
+.img-fallback {
+  position: relative; overflow: hidden;
+}
+.img-fallback > img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.hero-overlay { position: absolute; inset: 0; background: rgba(13,13,13,0.45); }
+.hero-bottom-gradient {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 176px;
+  background: linear-gradient(to top, rgba(13,13,13,0.65), transparent);
+}
+.hero-content {
+  position: relative; width: 100%;
+  max-width: 1480px; margin: 0 auto;
+  padding: 0 20px 40px;
+}
+@media (min-width: 768px) { .hero-content { padding: 0 32px 56px; } }
+.hero-capsule {
+  display: inline-flex; align-items: center; gap: 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(247,247,244,0.25);
+  background: rgba(247,247,244,0.1);
+  padding: 8px 16px; font-size: 14px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(247,247,244,0.9);
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(4.2rem, 14vw, 13rem);
+  line-height: 0.88;
+  color: var(--paper);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.hero-title {
+  font-size: 18px; color: rgba(247,247,244,0.78);
+  font-weight: 400; margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+@media (min-width: 768px) { .hero-title { font-size: 24px; } }
+.hero-intro {
+  max-width: 672px; font-size: 24px; line-height: 1.25;
+  color: var(--paper); margin-bottom: 36px;
+  font-weight: 400;
+}
+@media (min-width: 768px) { .hero-intro { font-size: 48px; } }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-scroll-btn {
+  position: absolute; right: 32px; bottom: 32px;
+  display: none; align-items: center; justify-content: center;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(247,247,244,0.3);
+  background: rgba(247,247,244,0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--paper); font-size: 18px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.hero-scroll-btn:hover { background: rgba(247,247,244,0.18); border-color: rgba(247,247,244,0.5); }
+@media (min-width: 768px) { .hero-scroll-btn { display: flex; } }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 36px; font-size: 15px; font-weight: 600;
+  border: none; cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all 0.3s;
+  font-family: var(--font-body);
+}
+.btn-primary { background: var(--paper); color: var(--ink); }
+.btn-primary:hover { background: rgba(247,247,244,0.85); }
+.btn-outline { background: transparent; color: var(--paper); border: 2px solid rgba(247,247,244,0.5); }
+.btn-outline:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.btn-dark { background: var(--ink); color: var(--paper); }
+.btn-dark:hover { background: var(--cobalt); }
+
+/* ===== Selected Work ===== */
+.work-section { padding: 80px 0 112px; }
+@media (min-width: 768px) { .work-section { padding: 80px 0 112px; } }
+.work-label {
+  font-size: 12px; text-transform: uppercase;
+  color: rgba(13,13,13,0.42);
+  letter-spacing: 0.08em; margin-bottom: 12px;
+}
+.work-title {
+  font-size: 36px; line-height: 1.15;
+  font-weight: 700; margin-bottom: 12px;
+  letter-spacing: -0.015em;
+}
+@media (min-width: 768px) { .work-title { font-size: 60px; } }
+.work-desc {
+  font-size: 18px; color: rgba(13,13,13,0.62);
+  max-width: 720px; line-height: 1.6;
+}
+.work-grid {
+  display: grid; gap: 40px;
+  grid-template-columns: 1fr;
+  margin-top: 56px;
+}
+@media (min-width: 768px) { .work-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1280px) { .work-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.work-card {
+  cursor: pointer; transition: transform 0.4s cubic-bezier(0.25,0.1,0.25,1), box-shadow 0.4s;
+}
+.work-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+.work-card-cover {
+  width: 100%; aspect-ratio: 5/4; overflow: hidden; position: relative;
+}
+.work-card-cover-inner {
+  width: 100%; height: 100%;
+  transition: transform 0.6s cubic-bezier(0.25,0.1,0.25,1);
+}
+.work-card:hover .work-card-cover-inner { transform: scale(1.04); }
+.work-card-info {
+  border-top: 1px solid rgba(13,13,13,0.1);
+  padding: 24px 0 0;
+}
+.work-card-number {
+  font-size: 12px; color: rgba(13,13,13,0.4);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.work-card-name {
+  font-size: 24px; font-weight: 700; line-height: 1.25;
+  margin-bottom: 6px; letter-spacing: -0.01em;
+}
+.work-card-category {
+  font-size: 14px; color: rgba(13,13,13,0.55);
+  margin-bottom: 8px;
+}
+.work-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; color: rgba(13,13,13,0.4);
+}
+.work-card-arrow {
+  font-size: 16px; transition: transform 0.3s;
+}
+.work-card:hover .work-card-arrow { transform: translate(4px, -4px); }
+
+/* ===== Detail Page ===== */
+.detail-page { padding-top: 64px; }
+.detail-inner { max-width: 1480px; margin: 0 auto; padding: 64px 20px 80px; }
+@media (min-width: 768px) { .detail-inner { padding: 80px 32px 100px; } }
+.detail-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; color: rgba(13,13,13,0.5);
+  margin-bottom: 24px;
+  transition: color 0.25s;
+  cursor: pointer;
+}
+.detail-back:hover { color: var(--ink); }
+.detail-year-tag {
+  display: inline-block; font-size: 13px; font-weight: 600;
+  color: var(--moss); letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.detail-title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 11vw, 11rem);
+  line-height: 0.92; letter-spacing: -0.02em;
+  margin-bottom: 24px; font-weight: 800;
+}
+.detail-overview {
+  font-size: 20px; line-height: 1.55;
+  color: rgba(13,13,13,0.7); max-width: 780px;
+  margin-bottom: 48px;
+}
+.detail-cover {
+  width: 100%; aspect-ratio: 16/9; margin-bottom: 56px;
+  overflow: hidden;
+}
+.detail-meta-table {
+  display: grid; grid-template-columns: 1fr;
+  gap: 0; border-top: 1px solid rgba(13,13,13,0.1);
+  border-bottom: 1px solid rgba(13,13,13,0.1);
+  margin-bottom: 56px;
+}
+@media (min-width: 768px) { .detail-meta-table { grid-template-columns: repeat(3, 1fr); } }
+.detail-meta-item {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(13,13,13,0.06);
+}
+@media (min-width: 768px) {
+  .detail-meta-item {
+    padding: 28px 24px; border-bottom: none;
+    border-right: 1px solid rgba(13,13,13,0.06);
+  }
+  .detail-meta-item:last-child { border-right: none; }
+}
+.detail-meta-label {
+  font-size: 11px; text-transform: uppercase;
+  color: rgba(13,13,13,0.35); letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.detail-meta-value { font-size: 16px; font-weight: 500; }
+.detail-section { margin-bottom: 56px; }
+.detail-section-title {
+  font-size: 14px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cobalt);
+  margin-bottom: 16px;
+}
+.detail-section-text {
+  font-size: 17px; line-height: 1.8;
+  color: var(--ink); max-width: 780px;
+}
+.detail-image-pair {
+  display: grid; grid-template-columns: 1fr;
+  gap: 16px; margin: 32px 0 48px;
+}
+@media (min-width: 768px) { .detail-image-pair { grid-template-columns: repeat(2, 1fr); } }
+.detail-image-placeholder {
+  width: 100%; aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.5); font-size: 13px; letter-spacing: 0.06em;
+}
+.detail-cta {
+  margin-top: 64px; padding-top: 40px;
+  border-top: 1px solid rgba(13,13,13,0.1);
+}
+.detail-cta .btn { font-size: 15px; padding: 16px 40px; }
+
+/* ===== Services ===== */
+.services-page { padding-top: 64px; }
+.services-inner { max-width: 1480px; margin: 0 auto; padding: 80px 20px 100px; }
+@media (min-width: 768px) { .services-inner { padding: 100px 32px 120px; } }
+.services-title {
+  font-size: 42px; font-weight: 800; margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) { .services-title { font-size: 64px; } }
+.services-desc {
+  font-size: 18px; color: rgba(13,13,13,0.62);
+  margin-bottom: 56px; max-width: 600px;
+}
+.services-grid {
+  display: grid; gap: 28px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .services-grid { grid-template-columns: repeat(4, 1fr); } }
+.service-card {
+  border: 1px solid rgba(13,13,13,0.1);
+  background: #fff;
+  border-radius: 8px;
+  padding: 32px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.service-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+.service-card-num {
+  font-family: var(--font-display);
+  font-size: 42px; font-weight: 800; color: rgba(13,13,13,0.06);
+  line-height: 1; margin-bottom: 16px;
+}
+.service-card-title {
+  font-size: 20px; font-weight: 700; margin-bottom: 12px;
+  color: var(--cobalt); line-height: 1.3;
+}
+.service-card-text {
+  font-size: 15px; color: rgba(13,13,13,0.6); line-height: 1.7;
+}
+
+/* ===== About ===== */
+.about-page { padding-top: 64px; }
+.about-inner { max-width: 1480px; margin: 0 auto; padding: 80px 20px 100px; }
+@media (min-width: 768px) { .about-inner { padding: 100px 32px 120px; } }
+.about-grid {
+  display: grid; gap: 48px;
+  grid-template-columns: 1fr; align-items: start;
+}
+@media (min-width: 768px) { .about-grid { grid-template-columns: 1fr 1fr; } }
+.about-photo-col { position: relative; }
+@media (min-width: 768px) { .about-photo-col { position: sticky; top: 96px; } }
+.about-photo {
+  width: 100%; aspect-ratio: 4/5;
+  background: linear-gradient(160deg, var(--cobalt) 0%, #4A7BC8 30%, var(--moss) 60%, var(--clay) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.4); font-size: 14px; letter-spacing: 0.06em;
+}
+.about-title {
+  font-size: 42px; font-weight: 800; margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) { .about-title { font-size: 56px; } }
+.about-role {
+  font-size: 17px; color: var(--moss); font-weight: 500; margin-bottom: 20px;
+}
+.about-bio {
+  font-size: 17px; color: var(--ink); line-height: 1.8; margin-bottom: 36px;
+}
+.skills-grid {
+  display: grid; gap: 8px;
+  grid-template-columns: 1fr;
+  margin-bottom: 40px;
+}
+@media (min-width: 640px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
+.skill-chip {
+  font-size: 13px; padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(13,13,13,0.08);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 500;
+  transition: border-color 0.2s;
+}
+.skill-chip:hover { border-color: var(--cobalt); }
+.about-contact-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.about-contact-row a {
+  font-size: 15px; color: var(--cobalt); font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.about-contact-row a:hover { border-bottom-color: var(--cobalt); }
+
+/* ===== Contact ===== */
+.contact-page { padding-top: 64px; }
+.contact-inner { max-width: 1480px; margin: 0 auto; padding: 80px 20px 100px; text-align: center; }
+@media (min-width: 768px) { .contact-inner { padding: 100px 32px 120px; } }
+.contact-title {
+  font-size: 42px; font-weight: 800; margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) { .contact-title { font-size: 64px; } }
+.contact-desc {
+  font-size: 18px; color: rgba(13,13,13,0.62);
+  margin-bottom: 56px; max-width: 500px; margin-left: auto; margin-right: auto;
+}
+.contact-email {
+  display: inline-block; font-size: 24px; font-weight: 600;
+  color: var(--cobalt); margin-bottom: 40px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s;
+}
+.contact-email:hover { border-bottom-color: var(--cobalt); }
+.social-links {
+  display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+}
+.social-links a {
+  font-size: 14px; color: var(--moss); font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: all 0.25s;
+}
+.social-links a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ===== Footer ===== */
+footer {
+  border-top: 1px solid rgba(13,13,13,0.1);
+  padding: 48px 20px;
+  max-width: 1480px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 16px; text-align: center;
+}
+@media (min-width: 768px) {
+  footer { padding: 56px 32px; flex-direction: row; justify-content: space-between; }
+}
+footer .footer-logo {
+  font-size: 14px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+footer .footer-desc { font-size: 13px; color: rgba(13,13,13,0.45); }
+footer .footer-socials { display: flex; gap: 20px; }
+footer .footer-socials a {
+  font-size: 13px; color: rgba(13,13,13,0.45);
+  transition: color 0.25s;
+}
+footer .footer-socials a:hover { color: var(--ink); }
+
+/* ===== Resume Section ===== */
+.resume-section {
+  padding: 80px 0 100px;
+  background: var(--paper);
+  border-top: 1px solid rgba(13,13,13,0.06);
+}
+.resume-advantages {
+  display: grid; gap: 12px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .resume-advantages { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .resume-advantages { grid-template-columns: repeat(3, 1fr); } }
+.resume-adv-card {
+  border: 1px solid rgba(13,13,13,0.08);
+  background: #fff; border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.resume-adv-card:hover { border-color: rgba(49,92,152,0.3); box-shadow: var(--shadow-soft); }
+.resume-adv-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.resume-adv-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(49,92,152,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: var(--cobalt);
+  flex-shrink: 0;
+}
+.resume-adv-title {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  flex: 1;
+}
+.resume-adv-arrow {
+  font-size: 14px; color: rgba(13,13,13,0.35);
+  transition: transform 0.25s, color 0.25s;
+  flex-shrink: 0;
+}
+.resume-adv-card:hover .resume-adv-arrow { color: rgba(49,92,152,0.6); }
+.resume-adv-card.open .resume-adv-arrow { transform: rotate(180deg); }
+.resume-adv-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.22,1,0.36,1), margin-top 0.35s, opacity 0.25s;
+  opacity: 0;
+  font-size: 13px; line-height: 1.8; color: rgba(13,13,13,0.6);
+}
+.resume-adv-card.open .resume-adv-body {
+  max-height: 200px;
+  margin-top: 12px;
+  opacity: 1;
+}
+
+/* Timeline */
+.resume-timeline {
+  display: grid; gap: 32px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) { .resume-timeline { grid-template-columns: 1fr 1fr; } }
+.resume-tl-item {
+  position: relative; padding-left: 40px;
+  opacity: 0; transform: translateX(-24px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+.resume-tl-item.visible { opacity: 1; transform: translateX(0); }
+.resume-tl-line {
+  position: absolute; left: 11px; top: 28px; bottom: -32px;
+  width: 2px; background: rgba(13,13,13,0.08);
+}
+.resume-tl-dot {
+  position: absolute; left: 0; top: 6px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(49,92,152,0.25);
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+}
+.resume-tl-dot::after {
+  content: ""; width: 10px; height: 10px;
+  border-radius: 50%; background: var(--cobalt);
+}
+.resume-tl-period {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--moss); margin-bottom: 6px;
+}
+.resume-tl-role {
+  font-size: 17px; font-weight: 700; color: var(--ink);
+  margin-bottom: 2px;
+}
+.resume-tl-company {
+  font-size: 13px; font-weight: 500; color: rgba(13,13,13,0.55);
+  margin-bottom: 16px;
+}
+.resume-tl-highlights {
+  list-style: none;
+}
+.resume-tl-highlights li {
+  display: flex; gap: 10px;
+  font-size: 13px; line-height: 1.7; color: rgba(13,13,13,0.62);
+  margin-bottom: 10px;
+  opacity: 0; transform: translateX(-12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.resume-tl-highlights li.visible { opacity: 1; transform: translateX(0); }
+.resume-tl-bullet {
+  margin-top: 7px; width: 6px; height: 6px;
+  border-radius: 50%; background: rgba(194,120,91,0.5);
+  flex-shrink: 0;
+}
+
+/* Project Cards */
+.resume-projects {
+  display: grid; gap: 12px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .resume-projects { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .resume-projects { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1280px) { .resume-projects { grid-template-columns: repeat(5, 1fr); } }
+.resume-proj-card {
+  border: 1px solid rgba(13,13,13,0.08);
+  background: #fff; border-radius: 8px;
+  padding: 18px; cursor: default;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.resume-proj-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+.resume-proj-tag {
+  display: inline-block; font-size: 9px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--clay); background: rgba(194,120,91,0.08);
+  border-radius: 20px; padding: 3px 10px;
+  margin-bottom: 10px;
+}
+.resume-proj-name {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  transition: color 0.25s;
+  margin-bottom: 6px;
+}
+.resume-proj-card:hover .resume-proj-name { color: var(--cobalt); }
+.resume-proj-role { font-size: 12px; color: rgba(13,13,13,0.4); }
+
+/* Skills */
+.resume-skills {
+  display: grid; gap: 28px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .resume-skills { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1280px) { .resume-skills { grid-template-columns: repeat(4, 1fr); } }
+.resume-skill-group-label {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: rgba(13,13,13,0.35);
+  margin-bottom: 12px;
+}
+.resume-skill-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.resume-skill-chip {
+  display: inline-block; padding: 6px 12px;
+  border-radius: 6px; font-size: 12px; font-weight: 500;
+  border: 1px solid rgba(49,92,152,0.15);
+  background: rgba(49,92,152,0.06);
+  color: var(--cobalt);
+  cursor: default;
+  transition: transform 0.2s, background 0.2s;
+}
+.resume-skill-chip:hover { transform: scale(1.05) translateY(-2px); background: rgba(49,92,152,0.12); }
+.resume-skill-chip.clay { border-color:rgba(194,120,91,0.15);background:rgba(194,120,91,0.06);color:var(--clay); }
+.resume-skill-chip.clay:hover { background: rgba(194,120,91,0.12); }
+.resume-skill-chip.moss { border-color:rgba(113,128,106,0.15);background:rgba(113,128,106,0.06);color:var(--moss); }
+.resume-skill-chip.moss:hover { background: rgba(113,128,106,0.12); }
+
+/* Icon Skill Chip */
+.resume-skill-chip-icon {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px; font-size: 12px; font-weight: 500;
+  border: 1px solid rgba(13,13,13,0.08);
+  background: #fff;
+  color: rgba(13,13,13,0.7);
+  cursor: default;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.resume-skill-chip-icon .chip-icon-wrap {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: rgba(13,13,13,0.03);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.resume-skill-chip-icon:hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 12px 40px rgba(13,13,13,0.08);
+  border-color: rgba(49,92,152,0.2);
+}
+.resume-skill-chip-icon:hover .chip-icon-wrap { background: rgba(13,13,13,0.06); }
+.resume-skill-chip-icon.clay:hover { border-color: rgba(194,120,91,0.2); }
+
+/* Education */
+.resume-edu {
+  display: grid; gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .resume-edu { grid-template-columns: repeat(2, 1fr); } }
+.resume-edu-card {
+  display: flex; gap: 16px; align-items: flex-start;
+  border: 1px solid rgba(13,13,13,0.08);
+  background: #fff; border-radius: 8px;
+  padding: 20px;
+}
+.resume-edu-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(113,128,106,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--moss); font-size: 16px;
+  flex-shrink: 0;
+}
+.resume-edu-school { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.resume-edu-degree { font-size: 13px; color: rgba(13,13,13,0.55); }
+.resume-edu-period {
+  display: inline-block; margin-top: 6px;
+  font-size: 11px; font-weight: 500; color: var(--moss);
+  background: rgba(113,128,106,0.08);
+  border-radius: 20px; padding: 2px 10px;
+}
+.resume-edu-note { margin-top: 8px; font-size: 12px; color: rgba(13,13,13,0.4); line-height:1.6; }
+
+/* Contact Strip */
+.resume-contact-strip span.divider { width: 1px; height: 16px; background: rgba(13,13,13,0.1); }
+.resume-contact-item { display: flex; align-items: center; gap: 6px; }
+.resume-contact-icon { width: 14px; height: 14px; border-radius: 50%; }
+
+/* ===== Animations ===== */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== Masonry Gallery ===== */
+.showcase-section {
+  position: relative;
+  padding: 60px 0 80px;
+  background: var(--paper);
+  overflow: hidden;
+}
+.showcase-header {
+  max-width: 1480px; margin: 0 auto 40px;
+  padding: 0 20px;
+}
+@media (min-width: 768px) { .showcase-header { padding: 0 32px; } }
+.showcase-label {
+  font-size: 12px; text-transform: uppercase;
+  color: rgba(13,13,13,0.42);
+  letter-spacing: 0.08em; margin-bottom: 8px;
+}
+.showcase-subtitle {
+  font-size: 16px; color: rgba(13,13,13,0.55);
+}
+.showcase-masonry {
+  max-width: 1480px; margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+@media (min-width: 768px) { .showcase-masonry { padding: 0 32px; } }
+.showcase-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+}
+.showcase-item {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bone);
+  cursor: zoom-in;
+  box-shadow: 0 1px 16px rgba(0,0,0,0.05);
+}
+.showcase-item img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.showcase-item:hover img { transform: scale(1.045); }
+.showcase-counter {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(13,13,13,0.3);
+  letter-spacing: 0.05em;
+  margin-top: 24px;
+}
+@media (max-width: 767px) {
+  .showcase-masonry { gap: 10px; }
+  .showcase-col { gap: 10px; }
+}
+
+/* ===== Lightbox ===== */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: rgba(13,13,13,0.92);
+  align-items: center; justify-content: center;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.lightbox.open {
+  display: flex; animation: lbFadeIn 0.25s ease;
+}
+@keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.lightbox-img {
+  max-width: 90vw; max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 60px rgba(0,0,0,0.3);
+  transition: opacity 0.2s ease;
+}
+.lightbox-close {
+  position: absolute; top: 24px; right: 32px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.08);
+  color: #fff; font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.25s; z-index: 101;
+}
+.lightbox-close:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.5); }
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
+  color: #fff; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.25s;
+  z-index: 101;
+}
+.lightbox-nav:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.5); }
+.lightbox-prev { left: 16px; }
+.lightbox-next { right: 16px; }
+@media (min-width: 768px) {
+  .lightbox-prev { left: 32px; }
+  .lightbox-next { right: 32px; }
+}
+.lightbox-counter {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,0.6); font-size: 13px; letter-spacing: 0.04em;
+  z-index: 101;
+}
+
+/* ===== Gradient Placeholders ===== */
+.grad-0 { background: linear-gradient(135deg, #315C98 0%, #4A7BC8 40%, #5A8AD0 100%); }
+.grad-1 { background: linear-gradient(135deg, #71806A 0%, #8FA688 40%, #A3B89A 100%); }
+.grad-2 { background: linear-gradient(135deg, #C2785B 0%, #D4957A 40%, #E0A88C 100%); }
+.grad-3 { background: linear-gradient(135deg, #2C4F7C 0%, #3D6AAF 40%, #5180C8 100%); }
+.grad-4 { background: linear-gradient(135deg, #5A6B54 0%, #7D9175 40%, #94A88C 100%); }
+
+/* ===== Clients Marquee ===== */
+.clients-section {
+  padding: 56px 0 64px;
+  background: var(--paper);
+  border-top: 1px solid rgba(13,13,13,0.06);
+  border-bottom: 1px solid rgba(13,13,13,0.06);
+  overflow: hidden;
+}
+.clients-label {
+  text-align: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: rgba(13,13,13,0.38);
+  margin-bottom: 40px;
+}
+.clients-track-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.clients-track {
+  display: flex;
+  width: max-content;
+  animation: clientsScroll 44s linear infinite;
+}
+.clients-track:hover { animation-play-state: paused; }
+.clients-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.clients-item {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  padding: 0 30px;
+}
+.clients-item .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--clay);
+  margin-left: 44px;
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+@keyframes clientsScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ===== Manifesto ===== */
+.manifesto-section {
+  padding: 120px 0 140px;
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+}
+.manifesto-inner {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.manifesto-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: rgba(247,247,244,0.42);
+  margin-bottom: 52px;
+}
+.manifesto-statement {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-size: clamp(2.5rem, 6.8vw, 5.4rem);
+  max-width: 1150px;
+}
+.manifesto-statement .hl-space { color: #A3B89A; }
+.manifesto-statement .hl-visual { color: #8FA6CE; }
+.manifesto-statement .hl-live { color: #E0A88C; }
+.manifesto-meta {
+  margin-top: 76px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  border-top: 1px solid rgba(247,247,244,0.12);
+  padding-top: 44px;
+}
+.manifesto-col h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(247,247,244,0.5);
+  margin-bottom: 16px;
+}
+.manifesto-col p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(247,247,244,0.76);
+}
+@media (max-width: 767px) {
+  .manifesto-section { padding: 84px 0 96px; }
+  .manifesto-inner { padding: 0 20px; }
+  .manifesto-meta { grid-template-columns: 1fr; gap: 30px; }
+  .clients-section { padding: 44px 0 48px; }
+}
+
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#/work" onclick="navigate('work')">陈曦</a>
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#/work" data-nav="work" onclick="navigate('work'); closeMenu()">作品</a></li>
+      <li><a href="#/about" data-nav="about" onclick="navigate('about'); closeMenu()">关于</a></li>
+      <li><a href="#/services" data-nav="services" onclick="navigate('services'); closeMenu()">服务</a></li>
+      <li><a href="#/contact" data-nav="contact" onclick="navigate('contact'); closeMenu()">联系</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Home / Hero -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-bg"><img src="public/images/hero/hero-image.jpg" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt=""></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-bottom-gradient"></div>
+    <div class="hero-content">
+      <div class="hero-capsule reveal">活动视觉设计 · 商业美陈 · AI创意</div>
+      <h1 class="hero-name reveal" style="transition-delay:0.1s">陈曦</h1>
+      <p class="hero-title reveal" style="transition-delay:0.15s" id="heroTitle"></p>
+      <p class="hero-intro reveal" style="transition-delay:0.2s" id="heroIntro"></p>
+      <div class="hero-cta reveal" style="transition-delay:0.25s">
+        <button class="btn btn-primary" onclick="navigate('work')">查看作品</button>
+        <button class="btn btn-outline" onclick="navigate('contact')">开启项目</button>
+      </div>
+      <button class="hero-scroll-btn" onclick="scrollToWork()" aria-label="向下滚动">&#8595;</button>
+    </div>
+  </section>
+
+<!-- Clients Marquee -->
+  <section class="clients-section">
+    <p class="clients-label">合作品牌 · Clients</p>
+    <div class="clients-track-wrap">
+      <div class="clients-track" id="clientsTrack">
+        <div class="clients-group">
+          <span class="clients-item">建发集团<span class="dot"></span></span>
+          <span class="clients-item">草莓音乐节<span class="dot"></span></span>
+          <span class="clients-item">金鸡百花电影节<span class="dot"></span></span>
+          <span class="clients-item">万象城<span class="dot"></span></span>
+          <span class="clients-item">K11<span class="dot"></span></span>
+          <span class="clients-item">星河 COCO Park<span class="dot"></span></span>
+          <span class="clients-item">天虹购物中心<span class="dot"></span></span>
+          <span class="clients-item">摩登天空<span class="dot"></span></span>
+          <span class="clients-item">肆墨设计<span class="dot"></span></span>
+          <span class="clients-item">厦门文旅<span class="dot"></span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resume Section -->
+  <section class="resume-section">
+    <div class="container">
+      <div class="reveal" style="margin-bottom:48px">
+        <p style="font-size:12px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(13,13,13,0.42);margin-bottom:8px">About & Resume</p>
+        <h2 style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,3.75rem);line-height:1.04;font-weight:700;color:var(--ink);margin-bottom:8px">陈曦</h2>
+        <p style="font-size:18px;color:rgba(13,13,13,0.5)">美术指导 · 商业活动视觉设计师 · AICG创意设计师</p>
+      </div>
+
+      <!-- Summary -->
+      <div class="reveal resume-summary-card" style="border:1px solid rgba(13,13,13,0.08);background:#fff;border-radius:12px;padding:24px 32px;margin-bottom:48px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="font-size:14px;color:var(--cobalt)">✦</span>
+          <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(49,92,152,0.7)">个人简介</span>
+        </div>
+        <p style="font-size:15px;line-height:1.9;color:rgba(13,13,13,0.65)" id="resumeSummary"></p>
+      </div>
+
+      <!-- Core Advantages -->
+      <p class="reveal" style="font-size:12px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(13,13,13,0.42);margin-bottom:24px">核心优势</p>
+      <div class="resume-advantages" id="resumeAdvantages"></div>
+
+      <!-- Experience Timeline -->
+      <p class="reveal" style="font-size:12px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(13,13,13,0.42);margin:64px 0 28px">工作经历</p>
+      <div class="resume-timeline" id="resumeTimeline"></div>
+
+      <!-- Projects -->
+      <p class="reveal" style="font-size:12px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(13,13,13,0.42);margin:56px 0 24px">核心项目经历</p>
+      <div class="resume-projects" id="resumeProjects"></div>
+
+      <!-- Skills -->
+      <p class="reveal" style="font-size:12px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(13,13,13,0.42);margin:64px 0 28px">专业技能</p>
+      <div class="resume-skills" id="resumeSkills"></div>
+
+      <!-- Education -->
+      <p class="reveal" style="font-size:12px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(13,13,13,0.42);margin:64px 0 24px">教育背景</p>
+      <div class="resume-edu" id="resumeEducation"></div>
+
+      <!-- Self Evaluation -->
+      <div class="reveal resume-eval-card" id="resumeEval" style="margin-top:48px;border:1px solid rgba(13,13,13,0.08);background:#fff;border-radius:12px;padding:24px 28px"></div>
+
+      <!-- Contact Strip -->
+      <div class="reveal resume-contact-strip" id="resumeContact" style="margin-top:48px;border:1px solid rgba(13,13,13,0.08);background:#fff;border-radius:12px;padding:20px 28px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:14px;color:rgba(13,13,13,0.55)"></div>
+    </div>
+  </section>
+
+  <!-- Masonry Gallery -->
+  <section class="showcase-section" id="gallerySection">
+    <div class="showcase-header reveal">
+      <p class="showcase-label">视觉作品画廊</p>
+      <p class="showcase-subtitle">瀑布流浏览 · 点击图片全屏查看</p>
+    </div>
+    <div class="showcase-masonry" id="showcaseMasonry"></div>
+        <p class="showcase-counter" id="showcaseCounter"></p>
+  </section>
+
+  <!-- Manifesto -->
+  <section class="manifesto-section">
+    <div class="manifesto-inner">
+      <p class="manifesto-label reveal">Design Manifesto · 设计宣言</p>
+      <h2 class="manifesto-statement reveal">
+        以<span class="hl-space">空间思维</span>做<span class="hl-visual">视觉</span><br>
+        让每一次活动<br>
+        成为值得被记住的<span class="hl-live">现场</span>
+      </h2>
+      <div class="manifesto-meta">
+        <div class="manifesto-col reveal">
+          <h4>空间美学</h4>
+          <p>室内设计 + 国美进修双重功底，把握舞台、中庭、户外街区的尺度、光影与材质，让平面概念真正立起来。</p>
+        </div>
+        <div class="manifesto-col reveal">
+          <h4>AIGC 提效</h4>
+          <p>自研活动视觉提示词库与商用 AI 规范，方案产出效率提升 60%，快速输出舞台、装置、空间预演效果图。</p>
+        </div>
+        <div class="manifesto-col reveal">
+          <h4>全链路落地</h4>
+          <p>主 KV → 物料延展 → 美陈搭建 → 现场验收，一条完整叙事链，平均节约项目物料成本 18%。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Work Grid Page -->
+<div id="page-work" class="page">
+  <section class="work-section" style="padding-top:120px">
+    <div class="container reveal">
+      <p class="work-label">精选作品</p>
+      <h2 class="work-title">以图像驱动的活动视觉叙事，兼具商业落地性。</h2>
+      <p class="work-desc">商业活动全案设计精选 — 5个代表性案例</p>
+    </div>
+    <div class="container">
+      <div class="work-grid" id="workGrid2"></div>
+    </div>
+  </section>
+</div>
+
+<!-- Detail Page -->
+<div id="page-detail" class="page">
+  <section class="detail-page">
+    <div class="detail-inner" id="detailContent"></div>
+  </section>
+</div>
+
+<!-- Services Page -->
+<div id="page-services" class="page">
+  <section class="services-page">
+    <div class="services-inner reveal">
+      <h2 class="services-title">服务</h2>
+      <p class="services-desc">从策略到落地，全链路活动视觉服务</p>
+      <div class="services-grid" id="servicesGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- About Page -->
+<div id="page-about" class="page">
+  <section class="about-page">
+    <div class="about-inner">
+      <div class="about-grid">
+        <div class="about-photo-col">
+          <div class="about-photo reveal" style="position:relative;overflow:hidden;">
+            <img src="public/images/profile/profile.jpg" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="陈曦">
+          </div>
+        </div>
+        <div class="reveal">
+          <h2 class="about-title" id="aboutName"></h2>
+          <p class="about-role" id="aboutRole"></p>
+          <p class="about-bio" id="aboutBio"></p>
+          <div class="skills-grid" id="skillsList"></div>
+          <div class="about-contact-row" id="aboutContact"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Contact Page -->
+<div id="page-contact" class="page">
+  <section class="contact-page">
+    <div class="contact-inner reveal">
+      <h2 class="contact-title">联系</h2>
+      <p class="contact-desc">如需商务合作或项目咨询，欢迎联系</p>
+      <a class="contact-email" id="contactEmail" href=""></a>
+      <div class="social-links" id="socialLinks"></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-logo">陈曦</div>
+  <p class="footer-desc" id="footerIntro"></p>
+  <div class="footer-socials" id="footerSocials"></div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="关闭">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxPrev(event)" aria-label="上一张">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="lightboxNext(event)" aria-label="下一张">›</button>
+  <span class="lightbox-counter" id="lightboxCounter"></span>
+</div>
+
+<script>
+// ===== DATA (from siteData.js & images.js) =====
+const SITE = {
+  name: "陈曦",
+  title: "活动视觉设计师 / 视觉创意总监 / AI设计探索者",
+  intro: "创造独特的品牌视觉识别、数字体验与AI驱动的设计解决方案。",
+  email: "cxxhqcd@163.com",
+  socials: [
+    { label: "Behance", href: "https://behance.net/" },
+    { label: "Instagram", href: "https://instagram.com/" },
+    { label: "LinkedIn", href: "https://linkedin.com/" },
+  ]
+};
+
+const PROJECTS = [
+  {
+    id: "project01", slug: "jianfa-bay-mall-opening",
+    name: "南昌建发湾悦天地开业盛典",
+    category: "商业开业活动全案设计", year: "2026",
+    client: "建发房产商业板块",
+    overview: "城市综合体开业一站式视觉体系，围绕开业庆典仪式、街区美陈、全渠道营销传播打造完整线下落地视觉。",
+    challenge: "项目涵盖商业街区、户外广场、主力店多场景，需一套视觉兼顾开业热闹氛围与高端地产调性，输出百余种落地物料适配全城线上线下宣传投放。",
+    direction: "视觉融合城市在地文化肌理与现代商业潮流版式，模块化主视觉可拆分延展至舞台、街区装置、导视、新媒体物料，在地人文质感与商业热闹氛围双向平衡。",
+    processTitle: "开业主题KV / 街区美陈装置 / 线下全品类物料 / 线上传播视觉",
+    result: "完整开业视觉工具箱，涵盖主KV、广场舞台视觉、街区打卡装置、导视道旗、宣传单页、短视频封面、线上活动专题素材。",
+  },
+  {
+    id: "project02", slug: "xm-cocopark-invest-conference",
+    name: "厦门星河COCO Park招商发布会",
+    category: "商业招商发布会视觉设计", year: "2025",
+    client: "星河商业地产",
+    overview: "高端购物中心招商发布会全链路视觉，面向品牌商户打造专业商务、兼具潮流质感的整套会场传播视觉系统。",
+    challenge: "受众覆盖全国零售、餐饮、美妆品牌方，视觉既要体现商场高端定位，又要适配主会场、媒体专访、线上招商宣传多场景，统一商务专业调性。",
+    direction: "克制高级的几何排版搭配低饱和轻奢色系，主视觉分层拆分适配舞台大屏、招商手册、媒体背景板、线上钻展宣传物料，平衡商务正式感与商业潮流气质。",
+    processTitle: "招商主题概念 / 主KV会场视觉 / 招商手册物料 / 线上招商宣传素材",
+    result: "整套发布会视觉资产，包含主视觉KV、舞台大屏、签到装置、招商画册、商户宣传版式、线上推广短视频视觉素材。",
+  },
+  {
+    id: "project03", slug: "tianhong-mall-anniversary",
+    name: "会展北天虹购物中心周年庆",
+    category: "购物中心营销活动设计", year: "2025",
+    client: "天虹商场厦门分公司",
+    overview: "区域购物中心周年庆全案视觉，原创IP插画为核心，打造适配全年龄段客群的中庭美陈、场内促销、社交传播完整视觉体系。",
+    challenge: "商场多层多业态，需一套视觉适配美妆、餐饮、零售多品类促销物料，同时原创手绘建筑IP强化本地记忆点，兼顾线下打卡引流与线上社群裂变传播。",
+    direction: "原创手绘建筑IP作为核心视觉符号，柔和明快的色彩系统搭配标准化网格，图形可灵活延展至中庭装置、电梯广告、朋友圈海报、短视频封面，平衡亲民氛围感与商场规整视觉规范。",
+    processTitle: "周年主题IP / 中庭美陈视觉 / 场内促销延展物料 / 新媒体引流素材",
+    result: "完整周年庆物料包，涵盖原创建筑手绘IP、主KV、中庭打卡装置、场内吊旗展架、社群宣传长图、短视频宣传视觉。",
+  },
+  {
+    id: "project04", slug: "golden-rooster-film-week",
+    name: "金鸡百花电影节·电影文化周",
+    category: "大型文旅盛典活动设计", year: "2024",
+    client: "厦门市文旅局、电影节组委会",
+    overview: "国家级电影文化盛典整套视觉体系，覆盖颁奖主会场、城市文化展、全城户外氛围包装、全网宣发全链路视觉。",
+    challenge: "官方大型文旅项目，视觉需兼顾庄重官方质感与电影艺术浪漫氛围，同时适配红毯、城市街区、影院展厅、线上直播数十类场景，严格遵循官方视觉输出规范。",
+    direction: "以胶片光影作为核心视觉符号，克制高级的电影质感排版，分层模块化主视觉适配红毯装置、城市道旗、展厅展板、直播大屏，平衡政务正式感与影视艺术氛围感。",
+    processTitle: "盛典主视觉KV / 红毯会场视觉 / 城市氛围美陈 / 全网宣发素材",
+    result: "完整电影节视觉交付工具箱，颁奖舞台、红毯签到、城市户外氛围、影院展览物料、媒体发布会背景、线上直播包装、全网宣传海报。",
+  },
+  {
+    id: "project05", slug: "zhangzhou-meicheng-festival",
+    name: "漳州美一城城市主题节庆活动",
+    category: "购物中心营销活动设计", year: "2025",
+    client: "漳州美一城购物中心",
+    overview: "区域购物中心城市节日主题全案视觉，打造适配本地全年龄段客群的沉浸式中庭打卡、场内促销、社群引流视觉体系。",
+    challenge: "面向本地家庭、年轻消费群体，视觉需要亲民易传播，控制美陈与物料落地成本，同时适配短期临时活动、线上团购宣传，兼顾引流转化与商场长期品牌形象。",
+    direction: "柔和治愈系主题图形搭配轻量化延展组件，标准化视觉元素覆盖中庭打卡点、促销展架、电梯广告、线上团购海报，平衡大众亲和力与商场统一视觉规范。",
+    processTitle: "节日主题KV / 中庭打卡美陈 / 场内促销物料 / 社群传播海报",
+    result: "整套商场节日落地视觉资产，中庭美陈效果图、场内导视、促销单页、线上团购视觉、短视频宣传封面素材。",
+  },
+];
+
+const SERVICES = [
+  { title: "商业活动全案设计", text: "品牌发布会、晚宴盛典、展会快闪，从主题命名到全套落地视觉物料。" },
+  { title: "活动视觉艺术统筹", text: "活动主题概念、氛围情绪板、空间导视系统、全渠道视觉执行规范。" },
+  { title: "线上活动数字视觉", text: "活动官网专题、直播包装、线上投票互动、发布会演示界面设计。" },
+  { title: "AI赋能活动创意", text: "Prompt动概念Prompt创作、场景图生成、效果图精修、活动视觉方案落地打磨。" },
+];
+
+const SKILLS = [
+  "商业综合体开业全案", "购物中心节庆活动视觉", "商场中庭美陈装置设计",
+  "金鸡百花级大型文旅盛典视觉", "招商发布会全案视觉", "城市户外氛围包装",
+  "活动主KV视觉创作", "原创活动IP插画设计", "线上直播/新媒体宣传视觉",
+  "多场景物料落地规范与成本管控", "AI商业空间效果图渲染"
+];
+
+const GRADIENTS = ["grad-0", "grad-1", "grad-2", "grad-3", "grad-4"];
+
+// ===== Routing =====
+let currentPage = "home";
+let currentProject = null;
+let currentSlug = null;
+
+function navigate(page, slug) {
+  page = page || "home";
+  if (page === "detail" && slug) {
+    currentSlug = slug;
+    window.location.hash = "#/work/" + slug;
+  } else if (page === "home") {
+    window.location.hash = "#/home";
+  } else {
+    window.location.hash = "#/" + page;
+  }
+}
+
+function handleHash() {
+  var h = window.location.hash.slice(1) || "/home";
+  // Match #/work/slug
+  var detailMatch = h.match(/^\/work\/(.+)/);
+  if (detailMatch) {
+    var slug = detailMatch[1];
+    var proj = PROJECTS.find(function(p) { return p.slug === slug; });
+    if (proj) {
+      currentProject = proj;
+      showPage("detail");
+      renderDetail(proj);
+      return;
+    }
+  }
+  // Simple pages
+  var pageMap = { "/home": "home", "/work": "work", "/services": "services", "/about": "about", "/contact": "contact" };
+  var page = pageMap[h] || "home";
+  showPage(page);
+}
+
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
+  var el = document.getElementById("page-" + id);
+  if (el) el.classList.add("active");
+  currentPage = id;
+  updateNavActive(id);
+  window.scrollTo(0, 0);
+  // Reveal animations trigger
+  setTimeout(observeReveal, 100);
+}
+
+function updateNavActive(id) {
+  var navId = (id === "detail") ? "work" : id;
+  document.querySelectorAll(".nav-links a").forEach(function(a) {
+    a.classList.remove("active");
+    if (a.getAttribute("data-nav") === navId) a.classList.add("active");
+  });
+  // Also handle home
+  if (id === "home") {
+    document.querySelectorAll(".nav-links a").forEach(function(a) { a.classList.remove("active"); });
+  }
+}
+
+// ===== Render Functions =====
+function renderWorkGrids() {
+  var cardHtml = PROJECTS.map(function(p, i) {
+    var coverSrc = 'public/images/projects/' + p.id + '/cover.jpg';
+    return '<div class="work-card reveal" style="transition-delay:' + (i * 0.08) + 's" onclick="navigate(\'detail\',\'' + p.slug + '\')">'
+      + '<div class="work-card-cover"><div class="work-card-cover-inner ' + GRADIENTS[i] + '" style="position:relative;overflow:hidden;width:100%;height:100%;">'
+      + '<img src="' + coverSrc + '" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+      + '</div></div>'
+      + '<div class="work-card-info">'
+      + '<p class="work-card-number">0' + (i + 1) + ' / ' + p.year + '</p>'
+      + '<h3 class="work-card-name">' + p.name + '</h3>'
+      + '<p class="work-card-category">' + p.category + '</p>'
+      + '<div class="work-card-footer"><span>' + p.client + '</span><span class="work-card-arrow">↗</span></div>'
+      + '</div></div>';
+  }).join("");
+
+  var g1 = document.getElementById("workGrid");
+  var g2 = document.getElementById("workGrid2");
+  if (g1) g1.innerHTML = cardHtml;
+  if (g2) g2.innerHTML = cardHtml;
+}
+
+function renderDetail(proj) {
+  var el = document.getElementById("detailContent");
+  if (!el) return;
+  var i = PROJECTS.indexOf(proj);
+  var g = GRADIENTS[i % GRADIENTS.length];
+  var base = 'public/images/projects/' + proj.id + '/';
+
+  el.innerHTML = ''
+    + '<a class="detail-back" onclick="navigate(\'work\')">← 作品</a>'
+    + '<p class="detail-year-tag">' + proj.year + ' · ' + proj.category + '</p>'
+    + '<h1 class="detail-title">' + proj.name + '</h1>'
+    + '<p class="detail-overview">' + proj.overview + '</p>'
+    + '<div class="detail-cover"><div class="' + g + '" style="position:relative;overflow:hidden;width:100%;height:100%;">'
+    + '<img src="' + base + 'cover.jpg" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+    + '</div></div>'
+    + '<div class="detail-meta-table">'
+    + '<div class="detail-meta-item"><p class="detail-meta-label">客户</p><p class="detail-meta-value">' + proj.client + '</p></div>'
+    + '<div class="detail-meta-item"><p class="detail-meta-label">类别</p><p class="detail-meta-value">' + proj.category + '</p></div>'
+    + '<div class="detail-meta-item"><p class="detail-meta-label">年份</p><p class="detail-meta-value">' + proj.year + '</p></div>'
+    + '</div>'
+    + '<div class="detail-section">'
+    + '<h3 class="detail-section-title">Design Challenge</h3>'
+    + '<p class="detail-section-text">' + proj.challenge + '</p>'
+    + '</div>'
+    + '<div class="detail-section">'
+    + '<h3 class="detail-section-title">Creative Direction</h3>'
+    + '<p class="detail-section-text">' + proj.direction + '</p>'
+    + '</div>'
+    + '<div class="detail-section">'
+    + '<h3 class="detail-section-title">' + proj.processTitle + '</h3>'
+    + '<div class="detail-image-pair">'
+    + '<div class="detail-image-placeholder ' + GRADIENTS[i % 5] + '" style="position:relative;overflow:hidden;">'
+    + '<img src="' + base + 'process01.jpg" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+    + '</div>'
+    + '<div class="detail-image-placeholder ' + GRADIENTS[(i+1) % 5] + '" style="position:relative;overflow:hidden;">'
+    + '<img src="' + base + 'process02.jpg" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+    + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="detail-section">'
+    + '<h3 class="detail-section-title">Final Result</h3>'
+    + '<p class="detail-section-text">' + proj.result + '</p>'
+    + '<div class="detail-image-pair">'
+    + '<div class="detail-image-placeholder ' + GRADIENTS[(i+2) % 5] + '" style="position:relative;overflow:hidden;">'
+    + '<img src="' + base + 'final01.jpg" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+    + '</div>'
+    + '<div class="detail-image-placeholder ' + GRADIENTS[(i+3) % 5] + '" style="position:relative;overflow:hidden;">'
+    + '<img src="' + base + 'final02.jpg" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="">'
+    + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="detail-cta">'
+    + '<button class="btn btn-dark" onclick="navigate(\'contact\')">咨询类似项目</button>'
+    + '</div>';
+}
+
+function renderServices() {
+  var grid = document.getElementById("servicesGrid");
+  if (!grid) return;
+  grid.innerHTML = SERVICES.map(function(s, i) {
+    return '<div class="service-card reveal" style="transition-delay:' + (i * 0.1) + 's">'
+      + '<div class="service-card-num">0' + (i + 1) + '</div>'
+      + '<h3 class="service-card-title">' + s.title + '</h3>'
+      + '<p class="service-card-text">' + s.text + '</p>'
+      + '</div>';
+  }).join("");
+}
+
+function renderAbout() {
+  var nameEl = document.getElementById("aboutName");
+  var roleEl = document.getElementById("aboutRole");
+  var bioEl = document.getElementById("aboutBio");
+  var skillsEl = document.getElementById("skillsList");
+  var contactEl = document.getElementById("aboutContact");
+  if (nameEl) nameEl.textContent = SITE.name;
+  if (roleEl) roleEl.textContent = SITE.title;
+  if (bioEl) bioEl.textContent = SITE.intro;
+  if (skillsEl) skillsEl.innerHTML = SKILLS.map(function(s) { return '<span class="skill-chip reveal">' + s + '</span>'; }).join("");
+  if (contactEl) contactEl.innerHTML = '<a href="mailto:' + SITE.email + '">' + SITE.email + '</a>';
+}
+
+function renderContact() {
+  var emailEl = document.getElementById("contactEmail");
+  if (emailEl) { emailEl.href = "mailto:" + SITE.email; emailEl.textContent = SITE.email; }
+  var socialsEl = document.getElementById("socialLinks");
+  if (socialsEl) {
+    socialsEl.innerHTML = SITE.socials.map(function(s) { return '<a href="' + s.href + '" target="_blank" rel="noopener">' + s.label + '</a>'; }).join("");
+  }
+}
+
+function renderGlobal() {
+  // Hero
+  var tEl = document.getElementById("heroTitle");
+  var iEl = document.getElementById("heroIntro");
+  if (tEl) tEl.textContent = SITE.title;
+  if (iEl) iEl.textContent = SITE.intro;
+  // Footer
+  var fEl = document.getElementById("footerIntro");
+  if (fEl) fEl.textContent = SITE.intro;
+  var fsEl = document.getElementById("footerSocials");
+  if (fsEl) {
+    fsEl.innerHTML = SITE.socials.map(function(s) { return '<a href="' + s.href + '" target="_blank" rel="noopener">' + s.label + '</a>'; }).join("");
+  }
+}
+
+// ===== Scroll to Showcase =====
+function scrollToWork() {
+  var el = document.getElementById("gallerySection");
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
+// ===== Mobile Menu =====
+function toggleMenu() {
+  document.getElementById("navLinks").classList.toggle("open");
+  document.getElementById("menuToggle").classList.toggle("open");
+  document.body.style.overflow = document.getElementById("navLinks").classList.contains("open") ? "hidden" : "";
+}
+function closeMenu() {
+  document.getElementById("navLinks").classList.remove("open");
+  document.getElementById("menuToggle").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+// ===== Nav Scroll Effect =====
+
+// ===== Software Icons (inline SVG) =====
+var SOFTWARE_ICONS = {
+  ps: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#001E36"/><text x="12" y="17" text-anchor="middle" fill="#31A8FF" font-size="10" font-weight="700" font-family="sans-serif">Ps</text></svg>',
+  ai: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#330000"/><text x="12" y="17" text-anchor="middle" fill="#FF9A00" font-size="10" font-weight="700" font-family="sans-serif">Ai</text></svg>',
+  id: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#49021F"/><text x="12" y="17" text-anchor="middle" fill="#FF3366" font-size="10" font-weight="700" font-family="sans-serif">Id</text></svg>',
+  '3d': '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#1E1E1E"/><text x="12" y="14" text-anchor="middle" fill="#FFFFFF" font-size="7" font-weight="700" font-family="sans-serif">3D</text><text x="12" y="19" text-anchor="middle" fill="#AAAAAA" font-size="4.5" font-weight="600" font-family="sans-serif">MAX</text></svg>',
+  cad: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#0696D7"/><text x="12" y="17" text-anchor="middle" fill="#FFFFFF" font-size="7" font-weight="700" font-family="sans-serif">CAD</text></svg>',
+  mj: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#1A1A2E"/><path d="M7 16 L12 7 L17 16" stroke="#6366F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="12" cy="7" r="1.2" fill="#818CF8"/></svg>',
+  lo: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#0F172A"/><text x="12" y="17" text-anchor="middle" fill="#38BDF8" font-size="8" font-weight="700" font-family="sans-serif">LO</text></svg>',
+  cx: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="4" fill="#0D1B0E"/><text x="7" y="17" text-anchor="middle" fill="#10B981" font-size="6" font-weight="700" font-family="sans-serif">&lt;/&gt;</text><circle cx="16" cy="10" r="2.5" fill="#34D399" opacity="0.6"/></svg>'
+};
+
+function handleNavScroll() {
+  var nav = document.getElementById("navbar");
+  if (window.scrollY > 20) { nav.classList.add("scrolled"); }
+  else { nav.classList.remove("scrolled"); }
+}
+
+// ===== Intersection Observer for Reveal =====
+var revealObserver = null;
+function observeReveal() {
+  if (revealObserver) revealObserver.disconnect();
+  revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  document.querySelectorAll(".reveal").forEach(function(el) { revealObserver.observe(el); });
+}
+
+// ===== Masonry Gallery =====
+var GALLERY_IMAGES = [];
+var MISSING_NUMS = {};
+for (var gi = 1; gi <= 90; gi++) {
+  if (MISSING_NUMS[gi]) continue;
+  GALLERY_IMAGES.push('public/images/showcase/CXZP-' + (gi < 10 ? '0' : '') + gi + '.jpg');
+}
+var GALLERY_COUNT = GALLERY_IMAGES.length;
+
+var showcaseCols = 0;
+
+function getShowcaseColCount() {
+  var w = window.innerWidth;
+  if (w >= 1280) return 4;
+  if (w >= 768) return 3;
+  return 2;
+}
+
+function buildShowcaseMasonry() {
+  var container = document.getElementById('showcaseMasonry');
+  if (!container) return;
+  showcaseCols = getShowcaseColCount();
+  var cols = [];
+  for (var c = 0; c < showcaseCols; c++) cols.push([]);
+  for (var i = 0; i < GALLERY_COUNT; i++) {
+    cols[i % showcaseCols].push(i);
+  }
+  var html = '';
+  for (var c = 0; c < showcaseCols; c++) {
+    html += '<div class="showcase-col">';
+    for (var j = 0; j < cols[c].length; j++) {
+      var idx = cols[c][j];
+      html += '<div class="showcase-item reveal" data-idx="' + idx + '">'
+        + '<img src="' + GALLERY_IMAGES[idx] + '" loading="lazy" alt="作品 ' + (idx + 1) + '" onerror="this.style.display=\'none\'">'
+        + '</div>';
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+
+  var items = container.querySelectorAll('.showcase-item');
+  for (var k = 0; k < items.length; k++) {
+    items[k].addEventListener('click', function() {
+      openLightbox(parseInt(this.getAttribute('data-idx')));
+    });
+  }
+
+  var counter = document.getElementById('showcaseCounter');
+  if (counter) counter.textContent = GALLERY_COUNT + ' 幅作品';
+
+  if (typeof revealObserver !== 'undefined' && revealObserver) {
+    container.querySelectorAll('.reveal').forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  }
+}
+
+function renderShowcaseGallery() {
+  buildShowcaseMasonry();
+  var resizeTimer = null;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (getShowcaseColCount() !== showcaseCols) {
+        buildShowcaseMasonry();
+      }
+    }, 200);
+  });
+}
+
+// ===== Lightbox (updated for carousel) =====
+var galleryCurrentIndex = 0;
+var galleryTouchStartX = 0;
+
+function openLightbox(index) {
+  galleryCurrentIndex = index;
+  var lb = document.getElementById('lightbox');
+  var img = document.getElementById('lightboxImg');
+  var counter = document.getElementById('lightboxCounter');
+  img.style.opacity = '0';
+  img.src = GALLERY_IMAGES[index];
+  counter.textContent = (index + 1) + ' / ' + GALLERY_COUNT;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { img.style.opacity = '1'; }, 50);
+}
+
+function closeLightbox() {
+  var lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lightboxPrev(e) {
+  if (e) e.stopPropagation();
+  galleryCurrentIndex = (galleryCurrentIndex - 1 + GALLERY_COUNT) % GALLERY_COUNT;
+  updateLightboxImage();
+}
+
+function lightboxNext(e) {
+  if (e) e.stopPropagation();
+  galleryCurrentIndex = (galleryCurrentIndex + 1) % GALLERY_COUNT;
+  updateLightboxImage();
+}
+
+function updateLightboxImage() {
+  var img = document.getElementById('lightboxImg');
+  var counter = document.getElementById('lightboxCounter');
+  img.style.opacity = '0';
+  setTimeout(function() {
+    img.src = GALLERY_IMAGES[galleryCurrentIndex];
+    counter.textContent = (galleryCurrentIndex + 1) + ' / ' + GALLERY_COUNT;
+    img.style.opacity = '1';
+  }, 100);
+}
+
+function initLightbox() {
+  var lb = document.getElementById("lightbox");
+  if (!lb) return;
+
+  document.addEventListener("keydown", function(e) {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") lightboxPrev();
+    if (e.key === "ArrowRight") lightboxNext();
+  });
+
+  lb.addEventListener("touchstart", function(e) {
+    galleryTouchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  lb.addEventListener("touchend", function(e) {
+    var touchEndX = e.changedTouches[0].screenX;
+    var diff = galleryTouchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) lightboxNext();
+      else lightboxPrev();
+    }
+  });
+
+  lb.addEventListener("click", function(e) {
+    if (e.target === lb) closeLightbox();
+  });
+}
+
+// ===== Resume Data & Rendering =====
+var RESUME_DATA = {
+  name: "陈曦",
+  summary: "5 年商业活动全案视觉统筹经验，室内设计专业打底，国美进修空间装置与光影美学，兼具学院派审美与空间落地思维。深耕高端商业综合体、万人音乐节、城市官方文旅盛典赛道，曾任职香港头部商业创意机构肆墨设计、摩登天空等平台。精通 Midjourney、Lovar、Codex 全套 AIGC 工具，可独立完成「AI 创意概念 → 视觉定调 → 主 KV → 美陈统筹 → 物料延展 → 现场验收」全流程闭环；具备团队管理、多项目并行、成本优化、标准化视觉体系搭建能力，兼顾高端商务、官方艺术、青年潮流多元视觉风格。",
+  selfEvaluation: "具备美术指导独立带队全案操盘能力，融合国美学院派审美与室内空间底层逻辑，熟练运用 AIGC 提升创意产出效率。5 年深耕厦门本地，操盘千万级商业巡展、国家级电影节、头部音乐节、一线地产四大类标杆项目，完整覆盖从创意、AI 迭代、物料延展到现场落地、成本管控全流程。既能驾驭官方项目庄重艺术调性，也可打造潮流文娱商业视觉，入职可独立承接、统筹多项目并行工作。",
+  advantages: [
+    { title: "差异化空间美学优势", text: "室内设计 + 国美进修双重功底，精通舞台、中庭、户外街区空间尺度、光影与材质，解决普通平面设计师缺失的落地空间把控能力。" },
+    { title: "四大成熟赛道标杆项目", text: "国家级城市盛典、一线商业地产招商 / 周年活动、万人连锁音乐节、跨城千万级商业巡展，拥有全品类大型活动统筹经验。" },
+    { title: "标准化 AIGC 落地体系", text: "自研活动视觉专属提示词库，搭建商用 AI 创作规范，方案产出效率提升 60%，可快速输出舞台、装置、空间预演效果图。" },
+    { title: "美术指导全链路统筹能力", text: "独立定调项目视觉、搭建 VI 规范、审核全链路物料、管理 3 人创意小组，跨协调工程、搭建、甲方品牌部，保障多项目同步交付。" },
+    { title: "创意 + 落地双向能力", text: "原创手绘 IP、AI 创意视觉；精通印刷、钢结构美陈、户外亮化工艺，通过方案优化平均节约项目物料成本 18%。" }
+  ],
+  experience: [
+    {
+      company: "肆墨设计顾问（Xmore Design）厦门分部",
+      role: "视觉美术总监（AIGC 视觉负责人）",
+      period: "2024.09 – 至今",
+      highlights: [
+        "主导海西三城商业潮流季千万级巡展，依托国美空间艺术理论搭建全域统一视觉体系，项目入选集团年度标杆案例。",
+        "编制商场、音乐节、发布会三类 AI 标准化模板，输出行业落地白皮书全国分部复用，大幅缩短创意沟通周期。",
+        "统筹全年 10 场百万级商业演艺项目，负责视觉终审、舞台与美陈现场落地验收。",
+        "优化装置结构与物料选型，借助 AI 空间预演降低搭建返工，单项目物料成本节约 18%。"
+      ]
+    },
+    {
+      company: "厦门厦旅文化传媒",
+      role: "视觉美术统筹（AICG 创意专项）",
+      period: "2023.03 – 2024.08",
+      highlights: [
+        "独立操盘城市跨年、文旅推介等官方项目，产出主 KV、城市氛围包装、全媒体宣传物料。",
+        "统筹户外音乐节整体视觉，定调潮流赛博风格，统一舞台、夜景街区、线上线下宣发物料标准。",
+        "运用多款 AIGC 工具完成舞台光影、装置效果图迭代，结合国美光影理论提升画面质感，缩短项目周期。",
+        "搭建项目专属 VI 规范，联动工程、执行团队驻场验收，把控落地效果与项目成本。"
+      ]
+    },
+    {
+      company: "摩登天空（厦门分部）",
+      role: "视觉创意设计师（音乐节专项）",
+      period: "2022.09 – 2023.02",
+      highlights: [
+        "落地厦门草莓音乐节全套视觉，输出主视觉、舞台装置、围挡、导视、票务物料。",
+        "借助 AIGC 输出多版舞台夜景方案，融合厦门滨海特色打造城市限定视觉。",
+        "设计全套宣发海报、短视频封面，全网素材累计曝光 1200W+。"
+      ]
+    },
+    {
+      company: "厦门及时互动文化",
+      role: "商业活动视觉设计师",
+      period: "2021.05 – 2022.08",
+      highlights: [
+        "原创商场主视觉、建筑手绘、专属 IP 插画，一站式产出中庭美陈、线上线下全渠道物料。",
+        "制定多业态商场视觉延展标准，积累沉浸式商业空间设计实战经验。",
+        "在职期间完成中国美术学院视觉与空间艺术研修班进修。"
+      ]
+    }
+  ],
+  projects: [
+    { name: "海西城市商业潮流季（三城巡回）", role: "美术总监", tag: "千万级商业巡展" },
+    { name: "厦门草莓音乐节", role: "舞台视觉创意", tag: "万人音乐节" },
+    { name: "金鸡百花电影节电影文化周", role: "视觉主设计", tag: "国家级官方盛典" },
+    { name: "建发集团全国商业新品发布会", role: "全案美术指导", tag: "千万级招商发布" },
+    { name: "星河 COCO Park / 天虹 / 万象城 / K11", role: "年度活动全案视觉", tag: "一线商业地产" }
+  ],
+  skills: [
+    { label: "设计软件", chips: [
+      { name: "PS", icon: "ps" },
+      { name: "AI", icon: "ai" },
+      { name: "ID", icon: "id" },
+      { name: "3DMax", icon: "3d" },
+      { name: "CAD", icon: "cad" }
+    ], cls: "icon" },
+    { label: "AIGC 工具", chips: [
+      { name: "Midjourney", icon: "mj" },
+      { name: "Lovar", icon: "lo" },
+      { name: "Codex", icon: "cx" },
+      { name: "空间预演", icon: null },
+      { name: "舞台光影", icon: null },
+      { name: "AI画面精修", icon: null }
+    ], cls: "icon clay" },
+    { label: "岗位能力", chips: ["美术指导全案统筹","主视觉 KV 原创","商业 IP 手绘","大型舞台美陈设计","中庭空间设计"], cls: "moss" },
+    { label: "落地能力", chips: ["VI 体系搭建","印刷工艺把控","钢结构美陈工艺","现场验收","项目成本管控"], cls: "" },
+    { label: "服务赛道", chips: ["高端商业地产","万人音乐节","城市文旅官方盛典","购物中心营销活动"], cls: "clay" }
+  ],
+  education: [
+    {
+      school: "中国美术学院",
+      degree: "视觉与空间艺术研修班",
+      period: "2022.01 – 2022.06",
+      note: "系统学习空间装置、光影色彩、城市公共视觉，获研修班优秀创作奖。"
+    },
+    {
+      school: "漳州科技职业学院",
+      degree: "室内艺术设计（大专）",
+      period: "2017 – 2020",
+      note: "掌握空间布局、三维材质、光影美学，在校艺术节空间设计获省级视觉类银奖。"
+    }
+  ]
+};
+
+function renderResume() {
+  // Summary
+  var sumEl = document.getElementById("resumeSummary");
+  if (sumEl) sumEl.textContent = RESUME_DATA.summary;
+
+  // Advantages
+  var advEl = document.getElementById("resumeAdvantages");
+  if (advEl) {
+    advEl.innerHTML = RESUME_DATA.advantages.map(function(a, i) {
+      return '<div class="resume-adv-card reveal" onclick="toggleAdvCard(this)">'
+        + '<div class="resume-adv-header">'
+        + '<span class="resume-adv-num">' + ("0" + (i+1)).slice(-2) + '</span>'
+        + '<span class="resume-adv-title">' + a.title + '</span>'
+        + '<span class="resume-adv-arrow">&#9660;</span>'
+        + '</div>'
+        + '<div class="resume-adv-body">' + a.text + '</div>'
+        + '</div>';
+    }).join("");
+  }
+
+  // Timeline
+  var tlEl = document.getElementById("resumeTimeline");
+  if (tlEl) {
+    tlEl.innerHTML = RESUME_DATA.experience.map(function(exp, ei) {
+      return '<div class="resume-tl-item reveal" style="transition-delay:' + (ei*0.1) + 's">'
+        + (ei < RESUME_DATA.experience.length - 1 ? '<div class="resume-tl-line"></div>' : '')
+        + '<div class="resume-tl-dot"></div>'
+        + '<p class="resume-tl-period">' + exp.period + '</p>'
+        + '<h3 class="resume-tl-role">' + exp.role + '</h3>'
+        + '<p class="resume-tl-company">' + exp.company + '</p>'
+        + '<ul class="resume-tl-highlights">'
+        + exp.highlights.map(function(h, hi) {
+            return '<li style="transition-delay:' + (0.25 + hi*0.06) + 's"><span class="resume-tl-bullet"></span><span>' + h + '</span></li>';
+          }).join("")
+        + '</ul>'
+        + '</div>';
+    }).join("");
+  }
+
+  // Projects
+  var projEl = document.getElementById("resumeProjects");
+  if (projEl) {
+    projEl.innerHTML = RESUME_DATA.projects.map(function(p, i) {
+      return '<div class="resume-proj-card reveal" style="transition-delay:' + (i*0.07) + 's">'
+        + '<span class="resume-proj-tag">' + p.tag + '</span>'
+        + '<h4 class="resume-proj-name">' + p.name + '</h4>'
+        + '<p class="resume-proj-role">' + p.role + '</p>'
+        + '</div>';
+    }).join("");
+  }
+
+  // Skills
+  var skillsEl = document.getElementById("resumeSkills");
+  if (skillsEl) {
+    skillsEl.innerHTML = RESUME_DATA.skills.map(function(g) {
+      var isIconGroup = g.cls && g.cls.indexOf("icon") !== -1;
+      var chipsHtml;
+      if (isIconGroup) {
+        chipsHtml = g.chips.map(function(c) {
+          var iconSvg = (c.icon && SOFTWARE_ICONS[c.icon]) ? SOFTWARE_ICONS[c.icon] : '';
+          var iconCls = "resume-skill-chip-icon" + (g.cls.indexOf("clay") !== -1 ? " clay" : "");
+          return '<span class="' + iconCls + '">'
+            + (iconSvg ? '<span class="chip-icon-wrap">' + iconSvg + '</span>' : '<span class="chip-icon-wrap"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><circle cx="12" cy="12" r="10" stroke="rgba(49,92,152,0.4)" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="3" fill="rgba(49,92,152,0.3)"/></svg></span>')
+            + '<span>' + c.name + '</span></span>';
+        }).join("");
+      } else {
+        chipsHtml = g.chips.map(function(c) {
+          return '<span class="resume-skill-chip' + (g.cls ? ' ' + g.cls : '') + '">' + c + '</span>';
+        }).join("");
+      }
+      return '<div class="reveal">'
+        + '<p class="resume-skill-group-label">' + g.label + '</p>'
+        + '<div class="resume-skill-chips">' + chipsHtml + '</div></div>';
+    }).join("");
+  }
+
+  // Education
+  var eduEl = document.getElementById("resumeEducation");
+  if (eduEl) {
+    eduEl.innerHTML = RESUME_DATA.education.map(function(e, i) {
+      return '<div class="resume-edu-card reveal" style="transition-delay:' + (i*0.1) + 's">'
+        + '<div class="resume-edu-icon">&#x1F393;</div>'
+        + '<div>'
+        + '<h4 class="resume-edu-school">' + e.school + '</h4>'
+        + '<p class="resume-edu-degree">' + e.degree + '</p>'
+        + '<span class="resume-edu-period">' + e.period + '</span>'
+        + (e.note ? '<p class="resume-edu-note">' + e.note + '</p>' : '')
+        + '</div></div>';
+    }).join("");
+  }
+
+  // Contact
+  var contactEl = document.getElementById("resumeContact");
+  if (contactEl) {
+    contactEl.innerHTML = ''
+      + '<span class="resume-contact-item"><span class="resume-contact-icon" style="background:var(--clay)"></span>厦门</span>'
+      + '<span class="divider" style="display:none"></span>'
+      + '<span class="resume-contact-item"><span class="resume-contact-icon" style="background:var(--moss)"></span>18059381059</span>'
+      + '<span class="divider" style="display:none"></span>'
+      + '<span class="resume-contact-item"><span class="resume-contact-icon" style="background:var(--cobalt)"></span>cxxhqcd@163.com</span>'
+      + '<span class="divider" style="display:none"></span>'
+      + '<span class="resume-contact-item"><span class="resume-contact-icon" style="background:rgba(13,13,13,0.2)"></span>5 年商业活动全案经验</span>'
+      + '<span class="divider" style="display:none"></span>'
+      + '<span class="resume-contact-item"><span class="resume-contact-icon" style="background:var(--moss)"></span>国美视觉与空间艺术研修</span>';
+    if (window.innerWidth >= 640) {
+      var dividers = contactEl.querySelectorAll(".divider");
+      for (var d = 0; d < dividers.length; d++) dividers[d].style.display = "block";
+    }
+  }
+
+  // Self Evaluation
+  var evalEl = document.getElementById("resumeEval");
+  if (evalEl && RESUME_DATA.selfEvaluation) {
+    evalEl.innerHTML = '<div style="display:flex;align-items:flex-start;gap:12px">'
+      + '<div style="width:32px;height:32px;border-radius:50%;background:rgba(49,92,152,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">&#x2606;</div>'
+      + '<div>'
+      + '<p style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(13,13,13,0.35);margin-bottom:8px">自我评价</p>'
+      + '<p style="font-size:14px;line-height:1.8;color:rgba(13,13,13,0.65)">' + RESUME_DATA.selfEvaluation + '</p>'
+      + '</div></div>';
+  }
+}
+
+function toggleAdvCard(card) {
+  card.classList.toggle("open");
+}
+
+// ===== Init =====
+function init() {
+  var clientsTrack = document.getElementById('clientsTrack');
+  if (clientsTrack) clientsTrack.innerHTML += clientsTrack.innerHTML;
+  renderGlobal();
+  renderShowcaseGallery();
+  renderResume();
+  renderWorkGrids();
+  renderServices();
+  renderAbout();
+  renderContact();
+  handleHash();
+  observeReveal();
+  initLightbox();
+  window.addEventListener("hashchange", handleHash);
+  window.addEventListener("scroll", handleNavScroll);
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
